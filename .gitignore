@@ -12,6 +12,9 @@ npm-debug.log*
 # Firebase configuration
 firebaseConfig.js
 
+# Ignore UI-page.js
+UI-page.js
+
 # Other files to ignore
 .DS_Store
 Thumbs.db
