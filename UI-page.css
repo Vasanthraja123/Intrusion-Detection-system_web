@@ -1,0 +1,161 @@
+  html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-image: url('https://wallpapers.com/images/hd/honeycomb-cyber-security-de1nra84qghymwjm.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background-image: url('https://wallpapers.com/images/hd/honeycomb-cyber-security-de1nra84qghymwjm.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+        }
+
+        main {
+            margin: 20px;
+        }
+
+        section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-image: url("https://wallpaperaccess.com/full/2655708.jpg");
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 0px;
+            background: linear-gradient(to right, #00ffff 0%, #002080 80%);
+            background-color: #002080;
+            color: #bbb;
+            border-style: solid;
+            border-color: white;
+            border-width: 2px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            margin: 8px;
+            width: 130px;
+            height: 50px;
+        }
+
+        .b1 {
+            width: 200px;
+        }
+
+        .b11 {
+            text-align: center;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .h2 {
+            font-family: 'Roboto';
+            color: white;
+        }
+
+        .logs {
+            flex-grow: 1;
+            margin-right: 20px;
+        }
+
+        .controls {
+            max-width: 300px;
+        }
+
+        .notifications {
+    background: linear-gradient(to bottom, #ff66cc 0%, #ff0000 100%);
+    background-color: #e74c3c; /* Background color */
+    color: #fff; /* Text color */
+    padding: 15px; /* Padding */
+    border-radius: 8px; /* Border radius */
+    margin-top: 20px; /* Top margin */
+    display: none; /* Initially hide the notifications */
+    position: fixed; /* Fixed position so it stays at the top */
+    top: 0; /* Position from the top */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center horizontally */
+    z-index: 1000; /* Set a high z-index to ensure it appears on top of other elements */
+}
+
+
+        #videoBlog {
+            position: relative;
+        }
+
+        #videoBlog video {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        #dateTimeContainer {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            color: white;
+        }
+	.door-controls {
+    margin-bottom: 10px;
+margin-top:10px;
+}
+
+.door-controls button {
+    display: block;
+    margin-bottom: 5px;
+}
+
+        @media screen and (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+        }

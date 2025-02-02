@@ -1,0 +1,25 @@
+#include<stdio.h>
+int main(){
+    int n,b,a,half;
+    scanf("%d",&n);
+    half=n/2;
+    a=half-1;
+    b=half;
+    if(n>=6){
+    for(int i=1;i<=n;i++){
+        for(int j=0;j<n;j++){
+            printf("%c",(i==1)?'C':(i==n)?'K':(i==half||i==half+1)?'S':(b<=j&&j<=a)?'S':(i<half)?'C':'K');
+        }
+        printf("\n");
+        if(i<half-1){
+            a++;
+            b--;
+        }
+        else if(i>half+1){
+            a--;
+            b++;
+        }
+    }
+}
+    return 0;
+}

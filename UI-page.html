@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Home IDS</title>
+    <link rel="stylesheet" type="text/css" href="UI-page.css">
+</head>
+<body>
+<header>
+    <h1>Intrusion Detection System</h1>
+</header>
+<main>
+    <section class="container">
+        <div class="logs">
+    <div class="door-controls">
+        <button onclick="checkDoorStatus()">Check Door Status</button>
+        <button onclick="lockDoor()">Lock Door</button>
+        <button onclick="unlockDoor()">Unlock Door</button>
+    </div>
+            <h2 class="h2">Event Logs</h2>
+            <ul id="eventLogs"></ul>
+            <div class="notifications" id="notificationSection">
+                <h2 class="h2">Notifications</h2>
+                <p id="notificationMessage">System alert: Intrusion detected!</p>
+            </div>
+        </div>
+
+        <div class="controls">
+            <h2 class="h2">Enter The Details</h2>
+            <label for="selectCamera" class="h2">Select Camera:</label>
+            <select id="selectCamera">
+                <option value="laptop">Laptop Camera</option>
+                <option value="external1">External Camera 1</option>
+                <option value="external2">External Camera 2</option>
+                <option value="external3">External Camera 3</option>
+            </select>
+
+            <label for="fingerprintCanvas" class="h2">Verify FingerPrint:</label>
+            <canvas id="fingerprintCanvas" width="100" height="100"></canvas>
+
+            <label for="password" class="h2">Password:</label>
+            <input type="password" id="password" placeholder="Enter password" class="h2">
+
+            <button onclick="captureFingerprint()">Capture Fingerprint</button>
+            <button onclick="armSystem()">Arm System</button>
+            <button onclick="disarmSystem()">Disarm System</button>
+            <button onclick="authenticate()">Authenticate</button>
+            <button onclick="startCamera()">Start Camera</button>
+            <button onclick="stopCamera()">Stop Camera</button>
+            <div class="b11">
+                <button onclick="viewRecordedVideo()" class="b1">View Recorded Video</button>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="h2">Live Camera Feed</h2>
+        <video id="cameraFeed" controls autoplay>
+            <!-- Video source goes here -->
+        </video>
+    </section>
+
+    <section class="notifications" id="notificationSection">
+        <h2 class="h2">Notifications</h2>
+        <p id="notificationMessage" class="h2">System alert: Intrusion detected!</p>
+    </section>
+
+    <section id="videoBlog">
+        <!-- Your video blog content goes here -->
+        <div id="dateTimeContainer"></div>
+    </section>
+</main>
+<script src="UI-page.js"></script>
+</body>
+</html>

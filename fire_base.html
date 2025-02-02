@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recorded Videos</title>
+    <style>
+        .video-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .video-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .video-list li {
+            cursor: pointer;
+            margin-bottom: 10px;
+            color: blue;
+            text-decoration: underline;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Recorded Videos</h1>
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search videos...">
+    </div>
+    <div class="video-container">
+        <ul class="video-list" id="videoList"></ul>
+        <video id="videoPlayer" width="640" height="360" controls></video>
+    </div>
+
+    <script type="module">
+        import firebaseConfig from './firebaseConfig.js';
+        // Initialize Firebase
+        const firebase = require('firebase/app');
+        firebase.initializeApp(firebaseConfig);
+
+        // Get a reference to the Firebase Storage service
+        const storage = firebase.storage();
+
+        // Get a reference to the 'videos' directory
+        const videosRef = storage.ref('videos');
+
+        // Get references to UI elements
+        const videoList = document.getElementById('videoList');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const searchInput = document.getElementById('searchInput');
+
+        // Fetch the list of video files in the 'videos' directory
+        videosRef.listAll().then(function(res) {
+            res.items.forEach(function(itemRef) {
+                // Get the file name from the item reference
+                const fileName = itemRef.name;
+
+                // Create a new list item element
+                const listItem = document.createElement('li');
+                listItem.textContent = fileName;
+
+                // Add click event listener to play the video
+                listItem.addEventListener('click', function() {
+                    // Get the download URL for the clicked video file
+                    itemRef.getDownloadURL().then(function(url) {
+                        // Set the video source and play the video
+                        videoPlayer.src = url;
+                        videoPlayer.play();
+                    }).catch(function(error) {
+                        console.error('Error getting video URL:', error);
+                    });
+                });
+
+                // Append the list item to the video list
+                videoList.appendChild(listItem);
+            });
+        }).catch(function(error) {
+            console.error('Error listing videos:', error);
+        });
+
+        // Add event listener for search input
+        searchInput.addEventListener('input', function() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const videoItems = videoList.getElementsByTagName('li');
+
+            // Loop through each list item and show/hide based on the search term
+            for (let i = 0; i < videoItems.length; i++) {
+                const videoName = videoItems[i].textContent.toLowerCase();
+                if (videoName.includes(searchTerm)) {
+                    videoItems[i].style.display = 'block';
+                } else {
+                    videoItems[i].style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

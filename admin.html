@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Firebase_form</title>
+     <style>
+        *
+        {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            box-sizing: border-box;
+        }
+        body
+        {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: url("https://wallpapers.com/images/hd/4k-tech-twtykjtj0sv4hi62.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        .box
+        {
+            padding: 20px 30px;
+            width: 300px;
+            height: 500px;
+            backdrop-filter: blur(5px);
+            border-radius: 5px;
+            background: rgba(49, 49, 49, .2);
+            border: 1px solid rgba(255, 255, 255, .5);
+
+        }
+        .box .form
+        {
+            padding: 10px 20px;
+        }
+        .box .form h2
+        {
+            text-align: center;
+            color: #fff;
+        }
+        .profile-inputbox {
+            text-align: 30px;
+            margin-left: -20px;
+        }
+        .box .form form
+        {
+            margin-top: 50px;
+            align-items: center;
+        }
+        .box .form form .inputbox input
+        {
+            padding: 10px 20px;
+            border: none;
+            outline: none;
+            background: none;
+            border-bottom: 1px solid #000000;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+        .box .form form .inputbox span
+        {
+            position: absolute;
+            transform: translateY(-80px);
+            font-size: 14px;
+            color: #faf8fb;
+        }
+        .box .form form .sub
+        {
+            padding: 10px 20px;
+            color: #0a0a0a;
+            border: none;
+            outline: none;
+            background: #0cc0df;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <div class="form">
+        <h2>Admin Details</h2>
+        <form id="adminForm">
+            <div class="inputbox">
+                <input type="text" id="username" required>
+                <span>Username</span>
+            </div>
+            <div class="inputbox">
+                <input type="email" id="email" required>
+                <span>E-mail</span>
+            </div>
+            <div class="inputbox">
+                <input type="tel" id="phone" pattern="[0-9]{10}" required>
+                <span>Phone Number</span>
+            </div>
+            <div class="inputbox">
+                <input type="file" id="image" accept="image/*" required>
+                <span>Profile Picture</span>
+            </div>
+            <input type="submit" value="Submit" class="sub">
+        </form>
+    </div>
+</div>
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+    import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-storage.js";
+    import firebaseConfig from './firebaseConfig.js'; // Importing the external configuration
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+    const db = getDatabase(app);
+    const storage = getStorage(app);
+
+    // Submit form data to Firebase
+    document.getElementById("adminForm").addEventListener('submit', async function(e) {
+        e.preventDefault(); // Prevent form submission
+        const username = document.getElementById("username").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const image = document.getElementById("image").files[0];
+
+        // Check if username is not empty
+        if (username === "") {
+            alert("Please enter a username.");
+            return;
+        }
+
+        // Check if email is valid
+        if (!isValidEmail(email)) {
+            alert("Please enter a valid email.");
+            return;
+        }
+
+        // Check if phone number is valid
+        if (!isValidPhoneNumber(phone)) {
+            alert("Please enter a valid phone number.");
+            return;
+        }
+
+        try {
+            // Upload profile picture to Firebase Storage
+            const imageRef = storageRef(storage, `profile-pictures/${username}.${image.name.split('.').pop()}`);
+            const uploadTask = uploadBytesResumable(imageRef, image);
+
+            // Get download URL for the uploaded image
+            const downloadURL = await new Promise((resolve, reject) => {
+                uploadTask.on('state_changed',
+                    null,
+                    (error) => reject(error),
+                    () => {
+                        getDownloadURL(uploadTask.snapshot.ref).then(resolve);
+                    }
+                );
+            });
+
+            // Write data to Firebase Realtime Database
+            await set(ref(db, 'users/' + username), {
+                username: username,
+                email: email,
+                phone: phone,
+                profilePicture: downloadURL
+            });
+
+            alert("Data submitted successfully!");
+            document.getElementById("adminForm").reset();
+        } catch (error) {
+            console.error("Error writing document: ", error);
+            alert("An error occurred. Please try again later.");
+        }
+    });
+
+    // Function to validate email format
+    function isValidEmail(email) {
+        const re = /\S+@\S+\.\S+/;
+        return re.test(email);
+    }
+
+    // Function to validate phone number format
+    function isValidPhoneNumber(phone) {
+        const re = /^\d{10}$/;
+        return re.test(phone);
+    }
+// Fetch data from Firebase and display it
+function fetchData() {
+    const usersRef = ref(db, 'users/');
+    get(usersRef).then((snapshot) => {
+        if (snapshot.exists()) {
+            const userData = snapshot.val();
+            // Loop through each user and display their details
+            for (const [key, value] of Object.entries(userData)) {
+                console.log(`${key}: ${value.username}, ${value.email}, ${value.phone}`);
+                // Display data in HTML as per your requirement
+            }
+        } else {
+            console.log("No data available");
+        }
+    }).catch((error) => {
+        console.error("Error fetching data: ", error);
+    });
+}
+
+// Update data in Firebase
+function updateData(username, newData) {
+    const userRef = ref(db, 'users/' + username);
+    set(userRef, newData)
+        .then(() => {
+            console.log("Data updated successfully");
+        })
+        .catch((error) => {
+            console.error("Error updating data: ", error);
+        });
+}
+
+// Delete data from Firebase
+function deleteData(username) {
+    const userRef = ref(db, 'users/' + username);
+    set(userRef, null)
+        .then(() => {
+            console.log("Data deleted successfully");
+        })
+        .catch((error) => {
+            console.error("Error deleting data: ", error);
+        });
+}
+
+
+</script>
+</body>
+</html>
