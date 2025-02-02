@@ -18,3 +18,8 @@ UI-page.js
 # Other files to ignore
 .DS_Store
 Thumbs.db
+
+# Additional files to ignore
+admin data.js
+face-api.js
+fire_base.html
